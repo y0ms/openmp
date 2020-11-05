@@ -55,26 +55,3 @@ int main(int argc, char *argv[]) {
    std::cout << "Serial_Total(" << N << ") = " << total << " Time: " << end - begin << std::endl;
    return 0;
 }
-
-/* Результаты:
-Paral_Total (1000) = 48263 Time: 0.00200003
-Serial_Total(1000) = 48263 Time: 0.00100005
-
-Paral_Total (10000) = 484364 Time: 0.00299996
-Serial_Total(10000) = 484364 Time: 0.000999987
-
-Paral_Total (100000) = 4935172 Time: 0.00400001
-Serial_Total(100000) = 4935172 Time: 0.000999987
-
-Paral_Total (1000000) = 49211309 Time: 0.00600004
-Serial_Total(1000000) = 49211309 Time: 0.013
-
-Paral_Total (10000000) = 492254072 Time: 0.028
-Serial_Total(10000000) = 492254072 Time: 0.139
-
-Paral_Total (100000000) = 626848349 Time: 0.229
-Serial_Total(100000000) = 626848349 Time: 1.312
-
-Paral_Total (1000000000) = 1966335896 Time: 57.476
-Serial_Total(1000000000) = 1966335896 Time: 99.985
-*/
