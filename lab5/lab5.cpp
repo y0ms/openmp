@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     }
   }
    end = omp_get_wtime();
-   std::cout << "Sect1_Total (" << N << ") = " << total << " Time: " << end - begin << std::endl;
+   std::cout << "Sect2_Total (" << N << ") = " << total << " Time: " << end - begin << std::endl;
 
    total = 0;
    begin = omp_get_wtime();
@@ -75,26 +75,115 @@ int main(int argc, char *argv[]) {
      {
        #pragma omp section
        {
-         for (i = 0; i < N; i++){
-           if (A[i] % 2){
-             r = B[i] - A[i]; // нечётное
-             total += (r != 1) ? r : 0;
-           }
+         for (i = 0; i < N/4; i++){
+           if (A[i] % 2) r = B[i] - A[i]; // нечётное
+           else r = B[i] + C[i]; // четное
+           total += (r != 1) ? r : 0;
          }
        }
        #pragma omp section
        {
-         for (i = 0; i < N; i++){
-           if (!(A[i] % 2)){
-             r = B[i] + C[i]; // нечётное
-             total += (r != 1) ? r : 0;
-           }
+         for (i = N/4; i < N/2; i++){
+           if (A[i] % 2) r = B[i] - A[i]; // нечётное
+           else r = B[i] + C[i]; // четное
+           total += (r != 1) ? r : 0;
+         }
+       }
+       #pragma omp section
+       {
+         for (i = N/2; i < 3*N/4; i++){
+           if (A[i] % 2) r = B[i] - A[i]; // нечётное
+           else r = B[i] + C[i]; // четное
+           total += (r != 1) ? r : 0;
+         }
+       }
+       #pragma omp section
+       {
+         for (i = 3*N/4; i < N; i++){
+           if (A[i] % 2) r = B[i] - A[i]; // нечётное
+           else r = B[i] + C[i]; // четное
+           total += (r != 1) ? r : 0;
          }
        }
      }
    }
     end = omp_get_wtime();
-    std::cout << "Sect2_Total (" << N << ") = " << total << " Time: " << end - begin << std::endl;
+    std::cout << "Sect4_Total (" << N << ") = " << total << " Time: " << end - begin << std::endl;
+
+    total = 0;
+    begin = omp_get_wtime();
+    #pragma omp parallel shared(A, B, C) private(i, r) reduction (+:total)
+    {
+      #pragma omp sections
+      {
+        #pragma omp section
+        {
+          for (i = 0; i < N/8; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+        #pragma omp section
+        {
+          for (i = N/8; i < N/4; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+        #pragma omp section
+        {
+          for (i = N/4; i < 3*N/8; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+        #pragma omp section
+        {
+          for (i = 3*N/8; i < N/2; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+        #pragma omp section
+        {
+          for (i = N/2; i < 5*N/8; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+        #pragma omp section
+        {
+          for (i = 5*N/8; i < 3*N/4; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+        #pragma omp section
+        {
+          for (i = 3*N/4; i < 7*N/8; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+        #pragma omp section
+        {
+          for (i = 7*N/8; i < N; i++){
+            if (A[i] % 2) r = B[i] - A[i]; // нечётное
+            else r = B[i] + C[i]; // четное
+            total += (r != 1) ? r : 0;
+          }
+        }
+      }
+    }
+     end = omp_get_wtime();
+     std::cout << "Sect8_Total (" << N << ") = " << total << " Time: " << end - begin << std::endl;
 
 
    //printArr(A,N);
